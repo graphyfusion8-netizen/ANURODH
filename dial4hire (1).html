@@ -27,6 +27,8 @@
 <meta name="description" content="DIAL4HIRE connects job seekers with top employment opportunities in Delhi. Find accountants, Delhi jobs, and career support with DIAL4HIRE.">
 <meta name="keywords" content="DIAL4HIRE, JOBS, DELHI JOBS, DAIL4HIRE, ACCOUNTANTS, JOBS KAHAN SAE DHUNDU DELHI HAEN">
 <title>DIAL4HIRE — Premier Job Placement, Delhi NCR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1717,48 +1719,59 @@ footer {
 </a>
 
 <script>
-  // Scroll reveal
-  const revEls = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.08 });
-  revEls.forEach(r => obs.observe(r));
+  // Defer non-critical UI initialization until idle/load to improve first contentful paint
+  (function initDeferredUI(){
+    function run() {
+      // Scroll reveal
+      const revEls = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.08 });
+      revEls.forEach(r => obs.observe(r));
 
-  // Floating card hover lift
-  document.querySelectorAll('.hcard').forEach(c => {
-    c.addEventListener('mouseenter', () => c.style.transform = c.classList.contains('hcard-main') ? 'translateX(-50%) translateY(-8px)' : 'translateY(-8px)');
-    c.addEventListener('mouseleave', () => c.style.transform = c.classList.contains('hcard-main') ? 'translateX(-50%)' : '');
-  });
+      // Floating card hover lift
+      document.querySelectorAll('.hcard').forEach(c => {
+        c.addEventListener('mouseenter', () => c.style.transform = c.classList.contains('hcard-main') ? 'translateX(-50%) translateY(-8px)' : 'translateY(-8px)');
+        c.addEventListener('mouseleave', () => c.style.transform = c.classList.contains('hcard-main') ? 'translateX(-50%)' : '');
+      });
 
-  // Header hide/show on scroll
-  (function(){
-    const body = document.body;
-    let lastScroll = window.pageYOffset || document.documentElement.scrollTop;
-    let ticking = false;
-    const delta = 14;
+      // Header hide/show on scroll
+      (function(){
+        const body = document.body;
+        let lastScroll = window.pageYOffset || document.documentElement.scrollTop;
+        let ticking = false;
+        const delta = 14;
 
-    function updateHeader() {
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-      const scrollDiff = currentScroll - lastScroll;
+        function updateHeader() {
+          const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollDiff = currentScroll - lastScroll;
 
-      if (currentScroll <= 80) {
-        body.classList.remove('header-hidden');
-      } else if (scrollDiff > delta) {
-        body.classList.add('header-hidden');
-      } else if (scrollDiff < -delta) {
-        body.classList.remove('header-hidden');
-      }
+          if (currentScroll <= 80) {
+            body.classList.remove('header-hidden');
+          } else if (scrollDiff > delta) {
+            body.classList.add('header-hidden');
+          } else if (scrollDiff < -delta) {
+            body.classList.remove('header-hidden');
+          }
 
-      lastScroll = currentScroll;
-      ticking = false;
+          lastScroll = currentScroll;
+          ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(updateHeader);
+            ticking = true;
+          }
+        });
+      })();
     }
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateHeader);
-        ticking = true;
-      }
-    });
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(run, {timeout: 2000});
+    } else {
+      window.addEventListener('load', () => setTimeout(run, 600));
+    }
   })();
 
   // --- Form autosave and localStorage "DB" ---
@@ -1938,6 +1951,25 @@ footer {
         alert('Could not save application locally.');
       }
     });
+  })();
+</script>
+<script>
+  // Ensure large inline/external images have size and lazy loading to reduce CLS
+  (function(){
+    try {
+      const logos = document.querySelectorAll('.logo img, .footer-brand .logo img');
+      logos.forEach(img => {
+        if (!img.getAttribute('loading')) img.setAttribute('loading','lazy');
+        if (!img.getAttribute('width')) img.setAttribute('width','54');
+        if (!img.getAttribute('height')) img.setAttribute('height','54');
+      });
+      const wa = document.querySelector('.whatsapp-float img');
+      if (wa) {
+        if (!wa.getAttribute('loading')) wa.setAttribute('loading','lazy');
+        if (!wa.getAttribute('width')) wa.setAttribute('width','32');
+        if (!wa.getAttribute('height')) wa.setAttribute('height','32');
+      }
+    } catch (e) { /* ignore */ }
   })();
 </script>
 </body>
