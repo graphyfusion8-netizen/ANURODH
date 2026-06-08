@@ -1023,6 +1023,40 @@ footer {
   .contact-form-wrap { padding: 28px 20px; }
 }
 </style>
+<!-- Structured data: Organization, WebSite (search), and LocalBusiness to help search engines understand the site -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "DIAL4HIRE",
+  "url": "https://dial4hire.netlify.app/",
+  "telephone": "+91 8384018120",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Swaroop Nagar",
+    "addressLocality": "Delhi",
+    "postalCode": "110033",
+    "addressCountry": "IN"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DIAL4HIRE",
+  "url": "https://dial4hire.netlify.app/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://dial4hire.netlify.app/?s={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- Link to sitemap (create and submit sitemap.xml to Google Search Console) -->
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 </head>
 <body>
 
